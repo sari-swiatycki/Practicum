@@ -12,7 +12,7 @@ namespace SingleZone.Core.DTOs
         public string? Genere { get; set; }
         public string? AudioUrl { get; set; }
         public string? Tags { get; set; }
-        public int PlayListId { get; set; }
+
         public Categories category { get; set; }
 
     }

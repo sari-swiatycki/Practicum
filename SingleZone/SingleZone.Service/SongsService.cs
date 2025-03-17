@@ -17,10 +17,10 @@ namespace SingleZone.Service
 {
     public class SongsService : ISongsService
     {
-        readonly IRepository<Songs> _repository;
+        readonly ISongRepository _repository;
         readonly IMapper _mapper;
 
-        public SongsService(IRepository<Songs> repository, IMapper mapper)
+        public SongsService(ISongRepository repository, IMapper mapper)
         {
             _repository = repository;
             _mapper = mapper;
@@ -76,8 +76,23 @@ namespace SingleZone.Service
         }
 
 
+        public IEnumerable<SongDto> GetSongByCategory(Categories? category = null)
+        {
+            var worksheets = _repository.GetSongByCategory(category);
+            return _mapper.Map<IEnumerable<SongDto>>(worksheets);
+        }
 
-      
+
+
+
+        public List<SongDto> SearchSongsByKeyword(string keyword)
+        {
+            var songs = _repository.SearchSongs(keyword);
+            return _mapper.Map<List<SongDto>>(songs);
+        }
+
+
+
 
     }
 }

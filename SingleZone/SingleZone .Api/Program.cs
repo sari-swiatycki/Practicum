@@ -52,7 +52,7 @@ builder.Services.AddAuthorization(options =>
 });
 
 // הוספת שירותים
-builder.Services.AddScoped<IRepository<Songs>, SongsRepository>();
+builder.Services.AddScoped<ISongRepository, SongsRepository>();
 builder.Services.AddScoped<IRepository<PlayList>, PlayListRepository>();
 builder.Services.AddScoped<IRepository<Users>, UsersRepository>();
 builder.Services.AddScoped<IUserRepository, UsersRepository>();
@@ -63,6 +63,9 @@ builder.Services.AddScoped<IUserRoleService, UserRoleService>();
 builder.Services.AddScoped<IRoleRpository, RoleRepository>();
 builder.Services.AddScoped<IUserRolesRepository, UserRolesRepository>();
 builder.Services.AddScoped<AuthService, AuthService>();
+builder.Services.AddScoped<IPlayListSongRepository, PlayListSongRepository>();
+builder.Services.AddScoped<IPlayListSongService, PlayListSongService>();
+
 
 // הוספת שירותי מסד נתונים
 builder.Services.AddDbContext<DataContext>(options =>

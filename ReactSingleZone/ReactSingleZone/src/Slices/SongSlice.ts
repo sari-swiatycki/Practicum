@@ -1,13 +1,10 @@
-// src/features/songs/songSlice.ts
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
+import axios from 'axios';  // הוספתי את הייבוא של axios
+import Category from '../types/Category';
+import category from '../types/Category';
+import { RootStore } from '../Stores/songStore';
 
-const API_URL = '/api';
-
-// הגדרת סוגי הנתונים
-interface Category {
-  Id: number;
-  Name: string;
-}
+const API_URL = 'http://localhost:5120';
 
 interface Song {
   Id: number;
@@ -26,31 +23,23 @@ interface SongState {
 export const fetchCategories = createAsyncThunk<Category[]>(
   'songs/fetchCategories',
   async () => {
-    const response = await fetch(`${API_URL}/categories`);
-    const data = await response.json();
-    return data;
+    const response = await axios.get(`${API_URL}/categories`); // שינוי ל-axios.get
+    return response.data; // axios מחזיר את הנתונים בתוך response.data
   }
 );
 
 // קריאת API להורדת שירים לפי קטגוריה
-export const fetchSongsByCategory = createAsyncThunk<Song[], number>(
-  'songs/fetchSongsByCategory',
-  async (categoryId) => {
-    const response = await fetch(`${API_URL}/songs/category/${categoryId}`);
-    const data = await response.json();
-    return data;
-  }
-);
+
 
 // יצירת ה-slice
 const songSlice = createSlice({
   name: 'songs',
   initialState: {
-    categories: [],
+    categories: [] as category[],
     songs: [],
     loading: false,
-    error: null,
-  } as SongState,
+    error: null as string | null ,
+  } ,
   reducers: {},
   extraReducers: (builder) => {
     builder
@@ -65,18 +54,8 @@ const songSlice = createSlice({
         state.loading = false;
         state.error = action.error.message ?? 'Failed to load categories';
       })
-      .addCase(fetchSongsByCategory.pending, (state) => {
-        state.loading = true;
-      })
-      .addCase(fetchSongsByCategory.fulfilled, (state, action: PayloadAction<Song[]>) => {
-        state.loading = false;
-        state.songs = action.payload;
-      })
-      .addCase(fetchSongsByCategory.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.error.message ?? 'Failed to load songs';
-      });
+      
   },
 });
-
+export const selectCategories = (state: RootStore) => state.songs
 export default songSlice.reducer;

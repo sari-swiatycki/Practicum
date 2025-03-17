@@ -12,8 +12,8 @@ using SingleZone.Data;
 namespace SingleZone.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20250312162835_second")]
-    partial class second
+    [Migration("20250317215756_fffff")]
+    partial class fffff
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -44,6 +44,29 @@ namespace SingleZone.Data.Migrations
                     b.HasIndex("userId");
 
                     b.ToTable("PlayLists");
+                });
+
+            modelBuilder.Entity("SingleZone.Core.entities.PlayListSong", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("PlayListId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SongId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PlayListId");
+
+                    b.HasIndex("SongId");
+
+                    b.ToTable("PlayListSong");
                 });
 
             modelBuilder.Entity("SingleZone.Core.entities.Roles", b =>
@@ -87,9 +110,6 @@ namespace SingleZone.Data.Migrations
                     b.Property<string>("Genere")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("PlayListId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Tags")
                         .HasColumnType("nvarchar(max)");
 
@@ -99,9 +119,10 @@ namespace SingleZone.Data.Migrations
                     b.Property<string>("audioUrl")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.Property<int>("category")
+                        .HasColumnType("int");
 
-                    b.HasIndex("PlayListId");
+                    b.HasKey("Id");
 
                     b.ToTable("Songs");
                 });
@@ -162,15 +183,23 @@ namespace SingleZone.Data.Migrations
                     b.Navigation("user");
                 });
 
-            modelBuilder.Entity("SingleZone.Core.entities.Songs", b =>
+            modelBuilder.Entity("SingleZone.Core.entities.PlayListSong", b =>
                 {
-                    b.HasOne("SingleZone.Core.entities.PlayList", "PlayList")
+                    b.HasOne("SingleZone.Core.entities.PlayList", "Playlist")
                         .WithMany()
                         .HasForeignKey("PlayListId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("PlayList");
+                    b.HasOne("SingleZone.Core.entities.Songs", "Song")
+                        .WithMany()
+                        .HasForeignKey("SongId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Playlist");
+
+                    b.Navigation("Song");
                 });
 
             modelBuilder.Entity("SingleZone.Core.entities.UserRoles", b =>

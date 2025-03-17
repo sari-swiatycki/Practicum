@@ -5,25 +5,18 @@
 namespace SingleZone.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class third : Migration
+    public partial class fffff : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<int>(
-                name: "category",
-                table: "Songs",
-                type: "int",
-                nullable: false,
-                defaultValue: 0);
+
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
-                name: "category",
-                table: "Songs");
+
         }
     }
 }

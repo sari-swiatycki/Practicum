@@ -43,6 +43,29 @@ namespace SingleZone.Data.Migrations
                     b.ToTable("PlayLists");
                 });
 
+            modelBuilder.Entity("SingleZone.Core.entities.PlayListSong", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("PlayListId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SongId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PlayListId");
+
+                    b.HasIndex("SongId");
+
+                    b.ToTable("PlayListSong");
+                });
+
             modelBuilder.Entity("SingleZone.Core.entities.Roles", b =>
                 {
                     b.Property<int>("Id")
@@ -84,9 +107,6 @@ namespace SingleZone.Data.Migrations
                     b.Property<string>("Genere")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("PlayListId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Tags")
                         .HasColumnType("nvarchar(max)");
 
@@ -100,8 +120,6 @@ namespace SingleZone.Data.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("PlayListId");
 
                     b.ToTable("Songs");
                 });
@@ -162,15 +180,23 @@ namespace SingleZone.Data.Migrations
                     b.Navigation("user");
                 });
 
-            modelBuilder.Entity("SingleZone.Core.entities.Songs", b =>
+            modelBuilder.Entity("SingleZone.Core.entities.PlayListSong", b =>
                 {
-                    b.HasOne("SingleZone.Core.entities.PlayList", "PlayList")
+                    b.HasOne("SingleZone.Core.entities.PlayList", "Playlist")
                         .WithMany()
                         .HasForeignKey("PlayListId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("PlayList");
+                    b.HasOne("SingleZone.Core.entities.Songs", "Song")
+                        .WithMany()
+                        .HasForeignKey("SongId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Playlist");
+
+                    b.Navigation("Song");
                 });
 
             modelBuilder.Entity("SingleZone.Core.entities.UserRoles", b =>

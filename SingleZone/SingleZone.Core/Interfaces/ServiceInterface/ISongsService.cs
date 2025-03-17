@@ -1,4 +1,5 @@
 ﻿using SingleZone.Core.DTOs;
+using SingleZone.Core.entities;
 
 namespace SingleZone.Core.Interfaces.ServiceInterface
 {
@@ -10,5 +11,8 @@ namespace SingleZone.Core.Interfaces.ServiceInterface
         SongDto AddSong(SongDto songDto);  // מוסיף שיר חדש מ-DTO
         bool Update(int id, SongDto songDto);  // מעדכן שיר קיים ב-DTO
         bool Remove(int id);  // מסיר שיר לפי מזהה
+        IEnumerable<SongDto> GetSongByCategory(Categories? category = null);
+        List<SongDto> SearchSongsByKeyword(string keyword);
+
     }
 }

@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
+using SingleZone.Core.DTOs;
 using SingleZone.Core.entities;
 using SingleZone.Core.Interfaces;
 using SingleZone.Data;
 
 namespace SingleZone.Data.Repository
 {
-    public class SongsRepository : IRepository<Songs>
+    public class SongsRepository :ISongRepository
     {
         private readonly DataContext _context;
 
@@ -93,10 +95,9 @@ namespace SingleZone.Data.Repository
             existingSong.Artist = song.Artist;
             existingSong.Genere = song.Genere;
             existingSong.audioUrl = song.audioUrl;
-            existingSong.PlayListId = song.PlayListId;
             existingSong.Tags = existingSong.Tags;
 
-            
+
             try
             {
                 _context.SaveChanges();
@@ -144,5 +145,37 @@ namespace SingleZone.Data.Repository
         //        return false;
         //    }
         //}
+
+
+
+        public List<Songs> GetSongByCategory(Categories? category = null)
+        {
+            if (category == null)
+            {
+                return _context.SongsList.ToList(); // אם לא נבחרה קטגוריה, מחזיר את כל דפי העבודה
+            }
+
+            return _context.SongsList
+                                   .Where(d => d.category == category)
+                                   .ToList(); // אם נבחרה קטגוריה, מחזיר רק את דפי העבודה בקטגוריה זו
+
+
+        }
+
+
+        public List<Songs> SearchSongs(string keyword)
+        {
+            return _context.SongsList           
+                 // כולל נתונים מטבלת ה-Playlist
+                .Where(s =>
+                    s.Title.Contains(keyword) ||
+                    s.Artist.Contains(keyword) ||
+                    s.Genere.Contains(keyword) ||
+                    s.Tags.Contains(keyword) ||
+                    s.category.ToString().Contains(keyword) 
+                  
+                )
+                .ToList();
+        }
     }
 }

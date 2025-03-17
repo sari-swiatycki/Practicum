@@ -16,7 +16,7 @@ namespace SingleZone.API.PostModales
 
         public string? Tags { get; set; }
 
-        public int PlayListId { get; set; }
+
         public Categories category { get; set; }
 
 

@@ -90,7 +90,38 @@ namespace SingleZone.Controllers
             if (!success) return NotFound("Song not found.");
 
             return Ok(success);
-        }      
+        }
+
+
+
+        [HttpGet("ByCategory/{category}")]
+        public ActionResult GetWorksheets(Categories category)
+        {
+            var worksheets = _songsService.GetSongByCategory(category);
+            return Ok(new { worksheets = worksheets });
+        }
+
+
+
+        [HttpGet("Search/{keyword}")]
+        public ActionResult<List<SongDto>> SearchSongs(string keyword)
+        {
+            if (string.IsNullOrWhiteSpace(keyword))
+            {
+                return BadRequest("Keyword cannot be empty.");
+            }
+
+            var songs = _songsService.SearchSongsByKeyword(keyword);
+
+            if (songs == null || songs.Count == 0)
+            {
+                return NotFound("No songs found matching the search term.");
+            }
+
+            return Ok(songs);
+        }
+
+
 
     }
 }

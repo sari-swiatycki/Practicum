@@ -68,6 +68,7 @@ namespace SingleZone.Service
             {
                 return null;
             }
+            
              var user = _mapper.Map<Users>(userDto);
              user= _repository.Add(user);
             _userRolesRepository.AddAsync(new UserRoles() { RoleId = id, UserId = user.Id });

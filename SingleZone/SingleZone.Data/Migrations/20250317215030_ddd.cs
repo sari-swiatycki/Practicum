@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace SingleZone.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class first : Migration
+    public partial class ddd : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -25,6 +25,24 @@ namespace SingleZone.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Roles", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Songs",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Artist = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Genere = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    audioUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Tags = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    category = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Songs", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -89,25 +107,27 @@ namespace SingleZone.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Songs",
+                name: "PlayListSong",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Artist = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Genere = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    audioUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Tags = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PlayListId = table.Column<int>(type: "int", nullable: false)
+                    PlayListId = table.Column<int>(type: "int", nullable: false),
+                    SongId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Songs", x => x.Id);
+                    table.PrimaryKey("PK_PlayListSong", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Songs_PlayLists_PlayListId",
+                        name: "FK_PlayListSong_PlayLists_PlayListId",
                         column: x => x.PlayListId,
                         principalTable: "PlayLists",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_PlayListSong_Songs_SongId",
+                        column: x => x.SongId,
+                        principalTable: "Songs",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -118,9 +138,14 @@ namespace SingleZone.Data.Migrations
                 column: "userId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Songs_PlayListId",
-                table: "Songs",
+                name: "IX_PlayListSong_PlayListId",
+                table: "PlayListSong",
                 column: "PlayListId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PlayListSong_SongId",
+                table: "PlayListSong",
+                column: "SongId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserRoles_RoleId",
@@ -137,13 +162,16 @@ namespace SingleZone.Data.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Songs");
+                name: "PlayListSong");
 
             migrationBuilder.DropTable(
                 name: "UserRoles");
 
             migrationBuilder.DropTable(
                 name: "PlayLists");
+
+            migrationBuilder.DropTable(
+                name: "Songs");
 
             migrationBuilder.DropTable(
                 name: "Roles");

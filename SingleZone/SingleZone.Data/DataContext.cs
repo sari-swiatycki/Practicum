@@ -14,6 +14,9 @@ namespace SingleZone.Data
         public DbSet<Songs> SongsList { get; set; }
         public DbSet<Roles> Roles { get; set; }
         public DbSet<UserRoles> UserRoles { get; set; }
+        public DbSet<PlayListSong> PlayListSong { get; set; }
+
+
 
         public DataContext(DbContextOptions<DataContext> options) : base(options)
         {
